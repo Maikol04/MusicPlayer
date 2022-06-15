@@ -1,5 +1,6 @@
 <template>
   <main>
+    <transition name="move">
     <pm-notification v-if=showNotification :NotificationType="this.status">
       <template v-slot:body>
         <p v-if="this.status === 'danger'">No se encontraron resultados</p>
@@ -8,11 +9,16 @@
         </p>
       </template>
     </pm-notification>
-    <pm-loader v-if="isLoading"></pm-loader>
+    </transition>
+    <transition name="move">
+      <pm-loader v-if="isLoading"></pm-loader>
+    </transition>
+    
     <section class="section" v-if="!isLoading">
       <nav class="nav navbar field.has-addons control is-expanded">
         <div class="container">
-          <input type="text" class="input is-large" placeholder="Buscar Canciones" v-model="searchQuery" @keyup.enter="search">
+          <input type="text" class="input is-large" placeholder="Buscar Canciones" v-model="searchQuery"
+            @keyup.enter="search">
           <button class="button is-large is-info" @click="search">Buscar</button>
           <button class="button is-danger is-large">&times;</button>
         </div>
@@ -37,7 +43,6 @@
 <script>
 
 import PmTrack from '@/components/Pm-Track.vue';
-
 import PmLoader from '@/components/shared/Pm-Loader.vue';
 import PmNotification from '@/components/shared/Pm-Notification.vue';
 
@@ -90,17 +95,14 @@ export default {
           const data = await res.json();
           this.showNotification = true;
           this.status = data.tracks.total > 0 ? 'success' : 'danger';
-          console.log(this.status);
           this.tracks = data.tracks.items;
+          this.tracks = this.tracks.filter(v => v.preview_url != null)
           this.isLoading = false;
         } catch (error) {
           alert(error);
         }
 
       }
-
-
-
     },
     setSelectedTrack(id) {
       this.selectedTrack = id;

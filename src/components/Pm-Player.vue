@@ -20,7 +20,7 @@
 </template>
 
 <script>
- import emitter from '@/services/emitter';
+import emitter from '@/services/emitter';
 export default {
     data(){
         return{
