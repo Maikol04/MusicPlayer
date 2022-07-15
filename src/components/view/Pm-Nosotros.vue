@@ -1,5 +1,9 @@
 <template lang="html">
-    <div class="container">
-        <h1 class="title">Nosotros</h1>
+  <div class="container">
+    <h1 class="title">About</h1>
+    <div class="box">
+      Pagina test, en la cuál podras buscar tus canciones favoritas en Spotify y
+      reproducir un fragmento de estás.
     </div>
+  </div>
 </template>

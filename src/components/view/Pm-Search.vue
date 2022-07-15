@@ -1,25 +1,32 @@
 <template>
   <main>
     <transition name="move">
-    <pm-notification v-if=showNotification :NotificationType="this.status">
-      <template v-slot:body>
-        <p v-if="this.status === 'danger'">No se encontraron resultados</p>
-        <p v-if="this.status === 'success'">
-          Se encontraron {{ this.tracks.length }} resultados
-        </p>
-      </template>
-    </pm-notification>
+      <pm-notification v-if="showNotification" :NotificationType="this.status">
+        <template v-slot:body>
+          <p v-if="this.status === 'danger'">No se encontraron resultados</p>
+          <p v-if="this.status === 'success'">
+            Se encontraron {{ this.tracks.length }} resultados
+          </p>
+        </template>
+      </pm-notification>
     </transition>
     <transition name="move">
       <pm-loader v-if="isLoading"></pm-loader>
     </transition>
-    
+
     <section class="section" v-if="!isLoading">
       <nav class="nav navbar field.has-addons control is-expanded">
         <div class="container">
-          <input type="text" class="input is-large" placeholder="Buscar Canciones" v-model="searchQuery"
-            @keyup.enter="search">
-          <button class="button is-large is-info" @click="search">Buscar</button>
+          <input
+            type="text"
+            class="input is-large"
+            placeholder="Buscar Canciones"
+            v-model="searchQuery"
+            @keyup.enter="search"
+          />
+          <button class="button is-large is-info" @click="search">
+            Buscar
+          </button>
           <button class="button is-danger is-large">&times;</button>
         </div>
       </nav>
@@ -30,8 +37,16 @@
       </div>
       <div class="container results">
         <div class="columns is-multiline">
-          <div class="column is-one-quarter" v-for="(track, t) in tracks" :key="t">
-            <pm-track :track="track" @select="setSelectedTrack" :class="{ 'is-active': track.id === selectedTrack }">
+          <div
+            class="column is-one-quarter"
+            v-for="(track, t) in tracks"
+            :key="t"
+          >
+            <pm-track
+              :track="track"
+              @select="setSelectedTrack"
+              :class="{ 'is-active': track.id === selectedTrack }"
+            >
             </pm-track>
           </div>
         </div>
@@ -41,39 +56,37 @@
 </template>
 
 <script>
-
-import PmTrack from '@/components/Pm-Track.vue';
-import PmLoader from '@/components/shared/Pm-Loader.vue';
-import PmNotification from '@/components/shared/Pm-Notification.vue';
+import PmTrack from "@/components/Pm-Track.vue";
+import PmLoader from "@/components/shared/Pm-Loader.vue";
+import PmNotification from "@/components/shared/Pm-Notification.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     PmTrack,
     PmLoader,
-    PmNotification
+    PmNotification,
   },
   provide() {
     return {
       trackPlayer: this.tracks,
-    }
+    };
   },
   data() {
     return {
-      searchQuery: '',
+      searchQuery: "",
       tracks: [],
       isLoading: false,
-      selectedTrack: '',
+      selectedTrack: "",
       showNotification: false,
-      status: '',
-    }
+      status: "",
+    };
   },
   computed: {
     searchMsg() {
-      return `Elementos encontrados :  ${this.tracks.length} `
-    }
-  }
-  ,
+      return `Elementos encontrados :  ${this.tracks.length} `;
+    },
+  },
   watch: {
     showNotification() {
       if (this.showNotification) {
@@ -81,35 +94,35 @@ export default {
           this.showNotification = false;
         }, 3000);
       }
-    }
+    },
   },
   methods: {
     async search() {
       if (this.searchQuery) {
-
         try {
           this.isLoading = true;
 
-          const API_URL = 'https://platzi-music-api.herokuapp.com/search?q=' + this.searchQuery + '&type=track';
+          const API_URL =
+            "https://platzi-music-api.herokuapp.com/search?q=" +
+            this.searchQuery +
+            "&type=track";
           const res = await fetch(API_URL);
           const data = await res.json();
           this.showNotification = true;
-          this.status = data.tracks.total > 0 ? 'success' : 'danger';
+          this.status = data.tracks.total > 0 ? "success" : "danger";
           this.tracks = data.tracks.items;
-          this.tracks = this.tracks.filter(v => v.preview_url != null)
+          this.tracks = this.tracks.filter((v) => v.preview_url != null);
           this.isLoading = false;
         } catch (error) {
           alert(error);
         }
-
       }
     },
     setSelectedTrack(id) {
       this.selectedTrack = id;
-      console.log(this.selectedTrack);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
