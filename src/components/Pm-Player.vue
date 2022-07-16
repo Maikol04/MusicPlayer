@@ -1,7 +1,7 @@
 <template>
   <div class="content" v-if="track && track.album">
     <p>
-      <img :src="image" alt="imagen" />
+      <img :src="track.album.images[0].url" alt="imagen" />
     </p>
     <p>
       <strong>
@@ -15,29 +15,18 @@
 </template>
 
 <script>
-import emitter from "@/services/emitter";
+import { mapState } from "vuex";
+// import emitter from "@/services/emitter";
 export default {
-  data() {
-    return {
-      track: {},
-      image: "",
-    };
+  computed: {
+    ...mapState(["track", "image"]),
   },
-  watch: {
-    track() {
-      const Track = localStorage.getItem("Track");
-      this.track = Track;
-    },
-  },
-
   created() {
-    emitter.on("set-track", (track) => {
-      this.track = track;
-      this.image = track.album.images[0].url;
-    });
-    // const track = localStorage.getItem("Track");
-    // this.track = track;
-    // this.image = track.album.images[0].url;
+    // emitter.on("set-track", (track) => {
+    //   this.track = track;
+    //   console.log(track);
+    //   this.image = track.album.images[0].url;
+    // }
   },
 };
 </script>

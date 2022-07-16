@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import emitter from "@/services/emitter";
+// import emitter from "@/services/emitter";
 export default {
   props: {
     track: {
@@ -56,9 +56,8 @@ export default {
   methods: {
     SelectTrack() {
       this.$emit("select", this.track.id);
-      emitter.emit("set-track", this.track);
-      localStorage.setItem("TrackId", this.track.id);
-      localStorage.setItem("Track", this.track);
+      // emitter.emit("set-track", this.track);
+      this.$store.commit("setTrackStore", this.track);
     },
 
     goToTrack(id) {

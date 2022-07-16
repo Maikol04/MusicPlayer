@@ -55,7 +55,7 @@
 export default {
   data() {
     return {
-      track: {},
+      track: { type: Object },
     };
   },
   methods: {
@@ -71,10 +71,8 @@ export default {
     },
     play() {
       console.log("en select");
-      var idTrack = localStorage.getItem("TrackId");
-      if (idTrack != this.track.id) {
-        localStorage.setItem("Track", this.track);
-      }
+      this.$store.commit("setTrackStore", this.track);
+      console.log(this.track);
     },
   },
   created() {
