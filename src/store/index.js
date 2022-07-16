@@ -3,15 +3,15 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     track: {},
-    image: "",
+    trackDetail: {},
   },
   getters: {},
   mutations: {
     setTrackStore(state, track) {
       state.track = track;
     },
-    setImageStore(state, track) {
-      state.image = track.album.images[0].url;
+    setTrackDetail(state, track) {
+      state.trackDetail = track;
     },
   },
   actions: {},

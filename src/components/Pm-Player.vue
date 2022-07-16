@@ -19,7 +19,7 @@ import { mapState } from "vuex";
 // import emitter from "@/services/emitter";
 export default {
   computed: {
-    ...mapState(["track", "image"]),
+    ...mapState(["track", "trackDetail"]),
   },
   created() {
     // emitter.on("set-track", (track) => {

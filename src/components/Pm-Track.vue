@@ -61,6 +61,7 @@ export default {
     },
 
     goToTrack(id) {
+      this.$store.commit("setTrackDetail", this.track);
       this.$router.push({ name: "Track", params: { id } });
     },
   },

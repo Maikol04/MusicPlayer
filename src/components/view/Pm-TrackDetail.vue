@@ -1,14 +1,14 @@
 <template lang="html">
-  <div class="container" v-if="track.album">
+  <div class="container" v-if="trackDetail.album">
     <div class="columns is-centered">
       <div class="column is-3 has-text-centered">
         <figure class="media-left">
           <p class="image">
-            <img :src="track.album.images[0].url" />
+            <img :src="trackDetail.album.images[0].url" />
           </p>
           <span class="button is-primary is-normal btn-spotify">
             <a
-              :href="track.artists[0].external_urls.spotify"
+              :href="trackDetail.artists[0].external_urls.spotify"
               target="_blank"
               rel="noopener noreferrer"
               class="icon"
@@ -25,7 +25,7 @@
         <div class="panel">
           <div class="panel-heading">
             <h1 class="title">
-              {{ track.name }}
+              {{ trackDetail.name }}
             </h1>
           </div>
           <div class="box">
@@ -35,7 +35,7 @@
                 <!-- {{ track.artists[0].external_urls.spotify }}
                     {{ track }} -->
               </strong>
-              <p>{{ track.artists[0].name }}</p>
+              <p>{{ trackDetail.artists[0].name }}</p>
             </div>
             <div class="list">
               <strong>
@@ -43,7 +43,7 @@
                 <!-- {{ track.artists[0].external_urls.spotify }}
                     {{ track }} -->
               </strong>
-              <p>{{ track.album.name }}</p>
+              <p>{{ trackDetail.album.name }}</p>
             </div>
           </div>
         </div>
@@ -52,11 +52,15 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-  data() {
-    return {
-      track: { type: Object },
-    };
+  // data() {
+  //   return {
+  //     track: { type: Object },
+  //   };
+  // },
+  computed: {
+    ...mapState(["trackDetail"]),
   },
   methods: {
     async searchById(id) {
@@ -64,20 +68,20 @@ export default {
         const API_URL = "https://platzi-music-api.herokuapp.com/tracks/" + id;
         const res = await fetch(API_URL);
         const data = await res.json();
-        this.track = data;
+        this.trackDetail = data;
       } catch (error) {
         alert(error);
       }
     },
     play() {
-      console.log("en select");
-      this.$store.commit("setTrackStore", this.track);
-      console.log(this.track);
+      this.$store.commit("setTrackStore", this.trackDetail);
     },
   },
   created() {
     const id = this.$route.params.id;
-    this.searchById(id);
+    if (this.trackDetail.id != id) {
+      this.searchById(id);
+    }
   },
 };
 </script>
